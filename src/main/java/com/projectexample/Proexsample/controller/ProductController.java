@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projectexample.Proexsample.dto.Product;
+import com.projectexample.Proexsample.dto.ProductDTO;
 
 @RestController
 @CrossOrigin
@@ -23,7 +23,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public String saveProduct(@RequestBody Product product) {
+    public String saveProduct(@RequestBody ProductDTO product) {
         products.add(product.getName());
         return"Product Saved Successfully";
     }
