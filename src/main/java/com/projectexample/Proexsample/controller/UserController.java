@@ -35,7 +35,6 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.ok(new StanderdResponse(1, "", "something went wrong", false));
         }
-
         
     }
 }
