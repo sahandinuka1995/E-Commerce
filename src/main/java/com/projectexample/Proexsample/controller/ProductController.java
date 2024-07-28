@@ -1,5 +1,9 @@
 package com.projectexample.Proexsample.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,11 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projectexample.Proexsample.dto.ProductDTO;
-import com.projectexample.Proexsample.dto.UserDTO;
 import com.projectexample.Proexsample.entity.Product;
-import com.projectexample.Proexsample.entity.User;
 import com.projectexample.Proexsample.repository.ProductRepo;
-import com.projectexample.Proexsample.repository.UserRepo;
 import com.projectexample.Proexsample.util.StanderdResponse;
 
 @RestController
@@ -24,6 +25,9 @@ public class ProductController {
     
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping
     public ResponseEntity<StanderdResponse> addNewProduct(@RequestBody ProductDTO productDto){
@@ -43,5 +47,17 @@ public class ProductController {
             return ResponseEntity.ok(new StanderdResponse(1, "", "something went wrong", false));
         }
 
+    }
+
+    @GetMapping
+    public ResponseEntity<StanderdResponse> getAllProducts() {
+        try {
+            List<Product> all = productRepo.findAll();
+            List<ProductDTO> dtoList = all.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+
+            return ResponseEntity.ok(new StanderdResponse(0, dtoList, "Operation Successfull", true));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new StanderdResponse(1, "", "Something went wrong", false));
+        }
     }
 }
